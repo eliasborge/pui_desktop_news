@@ -1,5 +1,7 @@
 /bin
+/out
 .idea
 .settings
 
 pui_desktop_webnews.iml
+pui_desktop_news.iml
