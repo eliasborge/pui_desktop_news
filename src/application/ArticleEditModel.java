@@ -15,7 +15,6 @@ import javafx.scene.image.Image;
  *This class is used to represent an article when it is editing
  * This class is needed to develop ArticleEditController
  * @author ÁngelLucas
- *
  */
 class ArticleEditModel {
 	/**
