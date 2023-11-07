@@ -178,4 +178,7 @@ public class ArticleEditController {
 	            e.printStackTrace();
 	        }
 	}
+
+	public void goBack(ActionEvent actionEvent) {
+	}
 }
