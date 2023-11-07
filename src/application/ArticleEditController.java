@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import javax.json.JsonObject;
 
-
 import application.news.Article;
 import application.news.Categories;
 import application.news.User;
@@ -20,17 +19,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -39,21 +36,31 @@ import serverConection.ConnectionManager;
 import serverConection.exceptions.ServerCommunicationError;
 
 /**
- * @author ÁngelLucas
- *
+ * @author Antonio Carpintero Castilla & Angel Lucas
  */
 public class ArticleEditController {
 	/**
 	 * Connection used to send article to server after editing process
 	 */
     private ConnectionManager connection;
+
+	@FXML
+	private WebView articleField;
+	@FXML
+	private TextField TitleField;
+	@FXML
+	private TextField SubtitleField;
+	@FXML
+	private ChoiceBox<String> CategoryField;
+
+
     
     /**
-     * Instance that represent an article when it is editing 
+     * Instance that represent an article when it is editing
      */
 	private ArticleEditModel editingArticle;
 	/**
-	 * User whose is editing the article 
+	 * User whose is editing the article
 	 */
 	private User usr;
 	//TODO add attributes and methods as needed
@@ -95,8 +102,9 @@ public class ArticleEditController {
 	 * Title and category must be defined and category must be different to ALL
 	 * @return true if only if article was been correctly send
 	 */
+	@FXML
 	private boolean send() {
-		String titleText = null; // TODO Get article title
+		String titleText = TitleField.getText();; // TODO Get article title
 		Categories category = null; //TODO Get article cateory
 		if (titleText == null || category == null || 
 				titleText.equals("") || category == Categories.ALL) {
