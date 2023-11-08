@@ -4,12 +4,19 @@ package application;
 import application.news.User;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import serverConection.ConnectionManager;
 
+import java.io.IOException;
 
 
 public class LoginController {
@@ -55,15 +62,39 @@ public class LoginController {
 			this.loggedUsr = loginModel.validateUser(username,password);
 			if(this.loggedUsr != null){
 
-				//TODO REROUTE TO MAIN PAGE AND SET LOGGED IN
+				try {
+					Stage stage = (Stage) buttonLogin.getScene().getWindow();
+					FXMLLoader loader = new FXMLLoader(getClass().getResource(AppScenes.READER.getFxmlFile()));
+					Pane root = loader.load();
+					NewsReaderController controller = loader.getController();
+					controller.setUsr(loggedUsr);
+
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+					// Handle the exception if there's an issue loading the READER page.
+				}
 
 			}
 		}
 
 	}
 
-	public void goBack() {
-		//TODO REROUTE TO MAIN PAGE
+	public void goBack() throws IOException {
+		try {
+			Stage stage = (Stage) buttonLogin.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(AppScenes.READER.getFxmlFile()));
+			Pane root = loader.load();
+
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			// Handle the exception if there's an issue loading the READER page.
+		}
 	}
 
 	private boolean verifyLogin(){

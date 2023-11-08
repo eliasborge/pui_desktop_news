@@ -8,11 +8,16 @@ import application.news.Article;
 import application.news.User;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.WeakHashMap;
 
 /**
@@ -48,6 +53,8 @@ public class ArticleDetailsController {
 			@FXML
 			private Label userLabel;
 
+			private boolean body = true;
+
 
 
 			@FXML
@@ -68,13 +75,34 @@ public class ArticleDetailsController {
 			}
 
 			public void goBack(){
-				//TODO REROUTE BACK TO THE MAIN PAGE.
+				try {
+					Stage stage = (Stage) title.getScene().getWindow();
+					FXMLLoader loader = new FXMLLoader(getClass().getResource(AppScenes.READER.getFxmlFile()));
+					Pane root = loader.load();
+					NewsReaderController controller = loader.getController();
+
+
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+					// Handle the exception if there's an issue loading the READER page.
+				}
 
 
 			}
 
 			public void showAbstractBody(){
-				//TODO DUNNO YET
+				if(body){
+					articleField.getEngine().loadContent(article.getAbstractText());
+					body = false;
+				}
+				else{
+					articleField.getEngine().loadContent(article.getBodyText());
+					body=true;
+				}
+
 			}
 
 		/**
