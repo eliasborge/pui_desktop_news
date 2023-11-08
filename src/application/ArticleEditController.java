@@ -44,17 +44,6 @@ public class ArticleEditController {
 	 */
     private ConnectionManager connection;
 
-	@FXML
-	private WebView articleField;
-	@FXML
-	private TextField TitleField;
-	@FXML
-	private TextField SubtitleField;
-	@FXML
-	private ChoiceBox<String> CategoryField;
-
-
-    
     /**
      * Instance that represent an article when it is editing
      */
@@ -64,7 +53,14 @@ public class ArticleEditController {
 	 */
 	private User usr;
 	//TODO add attributes and methods as needed
-
+	@FXML
+	private WebView articleField;
+	@FXML
+	private TextField TitleField;
+	@FXML
+	private TextField SubtitleField;
+	@FXML
+	private ChoiceBox<String> CategoryField;
 
 
 	@FXML
