@@ -45,6 +45,8 @@ public class NewsReaderController {
     void initialize() {
         newsReaderModel.retrieveData();
         allArticles = newsReaderModel.getArticles();
+        System.out.println(allArticles);
+        articlesListView = new ListView<>();
         articlesListView.setItems(allArticles);
         articlesListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             setSelectedArticle(newSelection);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gluonhq.charm.glisten.control.DropdownButton?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.MenuItem?>
@@ -12,6 +12,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="753.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.NewsReaderController">
    <top>
       <TextField maxWidth="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="314.0" promptText="News Online for ID user" BorderPane.alignment="TOP_LEFT">
@@ -34,19 +39,22 @@
 
    </left>
    <bottom>
-      <DropdownButton fx:id="CategoryFilter" layoutX="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="BOTTOM_LEFT">
-	    <items>
-	        <MenuItem fx:id="filterAll" text="All" onAction="#filterHeadlines"/>
-	        <MenuItem fx:id="filterSport" text="Sport" onAction="#filterHeadlines"/>
-	        <MenuItem fx:id="filterPolitics" text="Politics" onAction="#filterHeadlines"/>
-	        <MenuItem fx:id="filterInternational" text="International" onAction="#filterHeadlines"/>
-	        <MenuItem fx:id="filterNational" text="National" onAction="#filterHeadlines"/>
-	        <MenuItem fx:id="filterTechnology" text="Technology" onAction="#filterHeadlines"/>
-	    </items>
-         <BorderPane.margin>
-            <Insets bottom="30.0" left="50.0" />
-         </BorderPane.margin>
-      </DropdownButton>
+       <ChoiceBox fx:id="CategoryFilter" layoutX="30.0" maxWidth="-Infinity" maxHeight="-Infinity" minWidth="-Infinity" minHeight="-Infinity" BorderPane.alignment="BOTTOM_LEFT">
+           <items>
+               <FXCollections fx:factory="observableArrayList">
+                   <MenuItem fx:id="filterAll" text="All" onAction="#filterHeadlines"/>
+                   <MenuItem fx:id="filterSport" text="Sport" onAction="#filterHeadlines"/>
+                   <MenuItem fx:id="filterPolitics" text="Politics" onAction="#filterHeadlines"/>
+                   <MenuItem fx:id="filterInternational" text="International" onAction="#filterHeadlines"/>
+                   <MenuItem fx:id="filterNational" text="National" onAction="#filterHeadlines"/>
+                   <MenuItem fx:id="filterTechnology" text="Technology" onAction="#filterHeadlines"/>
+
+               </FXCollections>
+           </items>
+           <BorderPane.margin>
+               <Insets bottom="30.0" left="50.0" />
+           </BorderPane.margin>
+       </ChoiceBox>
    </bottom>
    <center>
       <SplitPane fx:id="imageoverview" dividerPositions="0.34519572953736655" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="283.0" prefWidth="332.0" BorderPane.alignment="CENTER">
@@ -65,7 +73,7 @@
 		<!-- if article belongs to the logged user, commands ‘Edit’ and ‘Delete’ will be enabled. -->
             <Button fx:id="LoadArticleFromFile" mnemonicParsing="false" text="Load article from file" />
             <Button fx:id="login" layoutY="25.0" mnemonicParsing="false" text="Login" />
-			<Button fx:id="articleNewButton" layoutY="50.0" mnemonicParsing="false" text="New" onAction="#createNewArticle"/>
+			<Button fx:id="articleNewButton" layoutY="50.0" mnemonicParsing="false" text="New" onAction="#handleNewArticle"/>
             <Button fx:id="articleEditButton" layoutY="75.0" mnemonicParsing="false" text="Edit" />
             <Button fx:id="articleDeleteButton" layoutY="100.0" mnemonicParsing="false" text="Delete" />
             <Button fx:id="exit" layoutY="125.0" mnemonicParsing="false" text="Exit" />
