@@ -16,24 +16,33 @@
    <top>
       <TextField maxWidth="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="314.0" promptText="News Online for ID user" BorderPane.alignment="TOP_LEFT">
          <font>
-            <Font size="19.0" />
+            <Font name="System Bold Italic" size="24.0" />
          </font>
       </TextField>
    </top>
    <left>
-      <TitledPane animated="false" text="untitled" BorderPane.alignment="CENTER">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-        </content>
-      </TitledPane>
+      
+      <!-- When user selects one headline: Command
+		‘read more’ will be enabled, article image and abstract will be shown.  -->
+	<TitledPane fx:id="headlinesTitledPane" animated="false" text="Headlines" BorderPane.alignment="CENTER">
+	    <content>
+	        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+	            <ListView fx:id="headlinesListView" layoutX="10" layoutY="10" prefHeight="160.0" prefWidth="180.0" />
+	        </AnchorPane>
+	    </content>
+	</TitledPane>
+
    </left>
    <bottom>
-      <DropdownButton fx:id="dropdown" layoutX="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="BOTTOM_LEFT">
-          <items>
-              <MenuItem text="Sport" />
-              <MenuItem text="Politics" />
-              <MenuItem text="International" />
-          </items>
+      <DropdownButton fx:id="CategoryFilter" layoutX="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="BOTTOM_LEFT">
+	    <items>
+	        <MenuItem fx:id="filterAll" text="All" onAction="#filterHeadlines"/>
+	        <MenuItem fx:id="filterSport" text="Sport" onAction="#filterHeadlines"/>
+	        <MenuItem fx:id="filterPolitics" text="Politics" onAction="#filterHeadlines"/>
+	        <MenuItem fx:id="filterInternational" text="International" onAction="#filterHeadlines"/>
+	        <MenuItem fx:id="filterNational" text="National" onAction="#filterHeadlines"/>
+	        <MenuItem fx:id="filterTechnology" text="Technology" onAction="#filterHeadlines"/>
+	    </items>
          <BorderPane.margin>
             <Insets bottom="30.0" left="50.0" />
          </BorderPane.margin>
@@ -42,7 +51,9 @@
    <center>
       <SplitPane fx:id="imageoverview" dividerPositions="0.34519572953736655" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="283.0" prefWidth="332.0" BorderPane.alignment="CENTER">
         <items>
-          <AnchorPane fx:id="image" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+			<AnchorPane fx:id="imagePane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+			    <ImageView fx:id="articleImageView" fitHeight="100.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
+			</AnchorPane>
           <AnchorPane fx:id="articleoverview" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
         </items>
       </SplitPane>
@@ -50,13 +61,14 @@
    <right>
       <Pane prefHeight="200.0" prefWidth="190.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="loadarticle" mnemonicParsing="false" text="Load article from file" />
-            <Button fx:id="login" layoutY="25.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="60.0" text="Login" />
-            <Button fx:id="neww" layoutY="50.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="50.0" text="New" />
-            <Button fx:id="edit" layoutY="75.0" mnemonicParsing="false" text="Edit" />
-            <Button fx:id="delete" layoutY="100.0" mnemonicParsing="false" text="Delete" />
-            <Button fx:id="exit" layoutY="125.0" mnemonicParsing="false" prefHeight="20.0" text="Exit" />
-            <Button fx:id="readmore" layoutY="440.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="130.0" text="Read More" />
+         
+		<!-- if article belongs to the logged user, commands ‘Edit’ and ‘Delete’ will be enabled. -->
+            <Button fx:id="LoadArticleFromFile" mnemonicParsing="false" text="Load article from file" />
+            <Button fx:id="login" layoutY="25.0" mnemonicParsing="false" text="Login" />
+			<Button fx:id="articleNewButton" layoutY="50.0" mnemonicParsing="false" text="New" onAction="#createNewArticle"/>
+            <Button fx:id="articleEditButton" layoutY="75.0" mnemonicParsing="false" text="Edit" />
+            <Button fx:id="articleDeleteButton" layoutY="100.0" mnemonicParsing="false" text="Delete" />
+            <Button fx:id="exit" layoutY="125.0" mnemonicParsing="false" text="Exit" />
          </children>
          <BorderPane.margin>
             <Insets />
