@@ -13,7 +13,9 @@ import application.news.Categories;
 import application.news.User;
 import application.utils.JsonArticle;
 import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,17 +46,6 @@ public class ArticleEditController {
 	 */
     private ConnectionManager connection;
 
-	@FXML
-	private WebView articleField;
-	@FXML
-	private TextField TitleField;
-	@FXML
-	private TextField SubtitleField;
-	@FXML
-	private ChoiceBox<String> CategoryField;
-
-
-    
     /**
      * Instance that represent an article when it is editing
      */
@@ -63,9 +54,36 @@ public class ArticleEditController {
 	 * User whose is editing the article
 	 */
 	private User usr;
-	//TODO add attributes and methods as needed
 
+	@FXML
+	private TextField titleField;
+	@FXML
+	private TextField subtitleField;
+	@FXML
+	private ChoiceBox<Categories> categoryField;
+	@FXML
+	private ImageView imageField;
+	@FXML
+	private WebView articleField;
+	@FXML
+	private Button buttonBack;
+	@FXML
+	private Button buttonAbstractBody;
+	@FXML
+	private Label userLabel;
 
+	@FXML
+	private void initialize() {
+		titleField.textProperty().bind(editingArticle.titleProperty());
+		subtitleField.textProperty().bind(editingArticle.subtitleProperty());
+		categoryField.setValue(editingArticle.getCategory());
+		articleField.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+			if (newState == Worker.State.SUCCEEDED) {
+				String content = editingArticle.getBodyText();
+				articleField.getEngine().executeScript("document.body.innerHTML = '" + content + "';");
+			}
+		});
+	}
 
 	@FXML
 	void onImageClicked(MouseEvent event) {
@@ -96,6 +114,8 @@ public class ArticleEditController {
 
 		}
 	}
+
+
 	
 	/**
 	 * Send and article to server,
@@ -104,7 +124,7 @@ public class ArticleEditController {
 	 */
 	@FXML
 	private boolean send() {
-		String titleText = TitleField.getText();; // TODO Get article title
+		String titleText = titleField.getText(); // TODO Get article title
 		Categories category = null; //TODO Get article cateory
 		if (titleText == null || category == null || 
 				titleText.equals("") || category == Categories.ALL) {
@@ -112,8 +132,16 @@ public class ArticleEditController {
 			alert.showAndWait();
 			return false;
 		}
-//TODO prepare and send using connection.saveArticle( ...)
-		
+
+		try {
+			editingArticle.setCategory(categoryField.getValue());
+			editingArticle.commit();
+			connection.saveArticle(editingArticle.getArticleOriginal());
+		} catch (ServerCommunicationError e) {
+			Alert alert = new Alert(AlertType.ERROR, "Error sending the article to the server", ButtonType.OK);
+			alert.showAndWait();
+			return false;
+		}
 		return true;
 	}
 	
@@ -133,8 +161,10 @@ public class ArticleEditController {
 	 */
 	void setUsr(User usr) {
 		this.usr = usr;
-		//TODO Update UI and controls 
-		
+		if (usr == null) {
+			return; //Not logged user
+		}
+		this.userLabel.setText("News online for: " +usr.getLogin());
 	}
 
 	/**
@@ -157,7 +187,11 @@ public class ArticleEditController {
 	 */
 	void setArticle(Article article) {
 		this.editingArticle = (article != null) ? new ArticleEditModel(article) : new ArticleEditModel(usr);
-		//TODO update UI
+		this.titleField.setText("Title: " + article.getTitle());
+		this.subtitleField.setText("Subtitle: " + article.getSubtitle());
+		this.categoryField.setValue(Categories.valueOf(article.getCategory().toUpperCase()));
+		this.imageField.setImage(article.getImageData());
+		this.articleField.getEngine().loadContent(article.getBodyText());
 	}
 	
 	/**
@@ -180,5 +214,22 @@ public class ArticleEditController {
 	}
 
 	public void goBack(ActionEvent actionEvent) {
+		try {
+			Stage stage = (Stage) titleField.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(AppScenes.READER.getFxmlFile()));
+			Pane root = loader.load();
+			NewsReaderController controller = loader.getController();
+
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			// Handle the exception if there's an issue loading the READER page.
+		}
+	}
+
+	public void showAbstractBody(ActionEvent actionEvent) {
+		//TODO fill this method
 	}
 }
