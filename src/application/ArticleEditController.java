@@ -15,6 +15,7 @@ import application.utils.JsonArticle;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -78,7 +79,7 @@ public class ArticleEditController {
 		categoryField.setValue(editingArticle.getCategory());
 		articleField.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
 			if (newState == Worker.State.SUCCEEDED) {
-				String content = editingArticle.getBody();
+				String content = editingArticle.getBodyText();
 				articleField.getEngine().executeScript("document.body.innerHTML = '" + content + "';");
 			}
 		});
