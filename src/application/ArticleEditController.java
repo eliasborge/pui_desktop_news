@@ -76,7 +76,12 @@ public class ArticleEditController {
 		titleField.textProperty().bind(editingArticle.titleProperty());
 		subtitleField.textProperty().bind(editingArticle.subtitleProperty());
 		categoryField.setValue(editingArticle.getCategory());
-		//TODO bind the articleField
+		articleField.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+			if (newState == Worker.State.SUCCEEDED) {
+				String content = editingArticle.getBody();
+				articleField.getEngine().executeScript("document.body.innerHTML = '" + content + "';");
+			}
+		});
 	}
 
 	@FXML
@@ -127,7 +132,6 @@ public class ArticleEditController {
 			return false;
 		}
 
-		//TODO prepare and send using connection.saveArticle( ...)
 		try {
 			editingArticle.setCategory(categoryField.getValue());
 			editingArticle.commit();
