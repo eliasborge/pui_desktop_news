@@ -4,7 +4,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -15,85 +16,66 @@
    <children>
    
    	<!-- NewsforID shall fetch the User's ID -->
-      <Label fx:id="NewsforID" layoutX="81.0" layoutY="20.0" prefHeight="42.0" prefWidth="194.0" />
-      <HBox layoutX="15.0" layoutY="82.0" prefHeight="173.0" prefWidth="805.0">
+      <Label fx:id="NewsforID" layoutX="14.0" layoutY="20.0" prefHeight="42.0" prefWidth="194.0" />
+      <ImageView fx:id="articleImageView" fitHeight="164.0" fitWidth="287.0" layoutX="239.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true" />
+      <HBox layoutX="8.0" layoutY="256.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="289.0" prefWidth="799.0">
          <children>
-            <ImageView fx:id="articleImageView" fitHeight="164.0" fitWidth="287.0" pickOnBounds="true" preserveRatio="true" />
-            <VBox maxHeight="216.0" prefHeight="216.0" prefWidth="159.0" translateX="300.0">
-               <children>
-                  
-            		<!-- if article belongs to the logged user, commands ‘Edit’ and ‘Delete’ will be enabled. -->
-                  <Button fx:id="LoadArticleFromFileButton" mnemonicParsing="false" onAction="#handleLoadArticle" text="Load article from file">
-                     <VBox.margin>
-                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="LoginButton" mnemonicParsing="false" onAction="#handleLoginButton" text="Login">
-                     <VBox.margin>
-                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-                     </VBox.margin>
-                  </Button>
-      			<Button fx:id="articleNewButton" mnemonicParsing="false" onAction="#handleNewArticle" text="New">
-                     <VBox.margin>
-                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="articleEditButton" mnemonicParsing="false" onAction="#handleEditArticle" text="Edit"> 
-                     <VBox.margin>
-                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="articleDeleteButton" mnemonicParsing="false" onAction="#handleDeleteArticle" text="Delete">
-                     <VBox.margin>
-                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="exit" mnemonicParsing="false" onAction="#handleExitButton" text="Exit">
-                     <VBox.margin>
-                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <HBox layoutX="8.0" layoutY="256.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="214.0" prefWidth="799.0">
-         <children>
-		      <VBox layoutX="8.0" layoutY="256.0">
+		      <VBox alignment="CENTER" layoutX="8.0" layoutY="256.0">
 		         <children>
-		            <TitledPane fx:id="headlines" animated="false" prefWidth="202.0" text="Headlines">
-		               <content>
-		                  <!-- Content inside TitledPane (if any) -->
-		               </content>
-                     <content>
-                        <ListView fx:id="headlinesListView" prefHeight="200.0" prefWidth="200.0" />
-                     </content>
-		            </TitledPane> <!-- ListView attached below TitledPane -->
+                  <Label contentDisplay="CENTER" text="Headlines" />
+                  <ListView fx:id="headlinesListView" prefHeight="200.0" prefWidth="200.0" /> <!-- ListView attached below TitledPane -->
 		         </children>
 		      </VBox>
-            <WebView fx:id="Webview" prefHeight="259.0" prefWidth="568.0" translateX="30.0" />
+            <WebView fx:id="webView" prefHeight="155.0" prefWidth="568.0" translateX="30.0" />
          </children>
       </HBox>
-      <HBox layoutX="14.0" layoutY="510.0" prefHeight="205.0" prefWidth="788.0">
-         <children>
-            <TitledPane fx:id="Categories" animated="false" prefHeight="189.0" prefWidth="202.0" text="Categories">
-               <content>
-                  <!-- VBox with clickable Buttons -->
-                        <VBox>
-                        <MenuButton fx:id="categoryMenu" layoutX="24.0" layoutY="138.0" mnemonicParsing="false" prefHeight="26.0" pfrefWidth="30.0"></MenuButton>
-                           <items>
+
+      <Button fx:id="ReadMoreButton" layoutX="639.0" layoutY="561.0" mnemonicParsing="false" onAction="#handleReadMore" prefHeight="37.0" prefWidth="166.0" text="Read More" />
+               <MenuButton fx:id="categoryMenu" layoutX="8.0" layoutY="530.0" mnemonicParsing="false" prefHeight="30" prefWidth="196.0" text="Categories">
+                  <items>
 	                           <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="ALL" />
 	                           <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="ECONOMY" />
 	                           <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="INTERNATIONAL" />
 	                           <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="NATIONAL" />
 	                           <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="SPORTS" />
 	                           <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="TECHNOLOGY" />
-                          </items> 
-                        </VBox>
-               </content>
-            </TitledPane>
-            <Button fx:id="ReadMoreButton" mnemonicParsing="false" onAction="#handleReadMore" prefHeight="37.0" prefWidth="166.0" text="Read More" translateX="200.0" translateY="50.0" />
+                 </items>
+               </MenuButton>
+      <VBox layoutX="642.0" layoutY="41.0" maxHeight="216.0" prefHeight="216.0" prefWidth="159.0">
+         <children>
+            
+                  		<!-- if article belongs to the logged user, commands ‘Edit’ and ‘Delete’ will be enabled. -->
+            <Button fx:id="loadArticleFromFileButton" mnemonicParsing="false" onAction="#handleLoadArticle" text="Load article from file">
+               <VBox.margin>
+                  <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButton" text="Login">
+               <VBox.margin>
+                  <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+               </VBox.margin>
+            </Button>
+			<Button fx:id="articleNewButton" mnemonicParsing="false" onAction="#handleNewArticle" text="New">
+               <VBox.margin>
+                  <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="articleEditButton" mnemonicParsing="false" onAction="#handleEditArticle" text="Edit"> 
+               <VBox.margin>
+                  <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="articleDeleteButton" mnemonicParsing="false" onAction="#handleDeleteArticle" text="Delete">
+               <VBox.margin>
+                  <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="exit" mnemonicParsing="false" onAction="#handleExitButton" text="Exit">
+               <VBox.margin>
+                  <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+               </VBox.margin>
+            </Button>
          </children>
-      </HBox>
+      </VBox>
    </children>
 </AnchorPane>

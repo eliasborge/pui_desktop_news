@@ -1,18 +1,17 @@
 package application;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.control.MenuItem;
 import javafx.event.ActionEvent;
 import application.news.Article;
 import application.news.User;
 import javafx.collections.ObservableList;
+import javafx.stage.FileChooser;
 import serverConection.ConnectionManager;
 import application.news.Article; 
 import javafx.scene.web.WebView;
@@ -20,25 +19,30 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class NewsReaderController {
 
     // FXML injected UI components
-    @FXML private AnchorPane imagePane;
+
     @FXML private ImageView articleImageView;
-    @FXML private TextField searchField;
-    @FXML private ListView<Article> articlesListView;
-    @FXML private Text articleTitle;
-    @FXML private Text articleAbstract;
-    @FXML private Button newArticleButton;
+
+
+
     @FXML private Button articleEditButton;
     @FXML private Button articleDeleteButton;
-    @FXML private ListView<Article> headlinesListView;
+    @FXML private Button articleNewButton;
+    @FXML private Button loginButton;
+    @FXML private Button loadArticleFromFileButton;
     @FXML private ListView<String> headlinesListView;
     @FXML private Label NewsforID;
     @FXML private WebView webView;
     @FXML private Button readMoreButton;
+
     
 
     // Model and user information
@@ -48,59 +52,68 @@ public class NewsReaderController {
     private Article selectedArticle;
     private Article article; 
     private ConnectionManager connectionManager;
-    private ObservableList<Article> allArticles = FXCollections.observableArrayList();
 
-    // Dependency injection method, so that NewsReader can fetch UserID from ConnectionManager class
-    public void setConnectionManager(ConnectionManager connectionManager) {
-        this.connectionManager = connectionManager;
-    }
-    
 
-    
-	// Method to update the image in the ImageView, this method has to be called when a new article is selected
-    public void updateArticleImage(Article article) {
-        Image image = article.getImageData();
-        if (image != null) {
-            articleImageView.setImage(image);
-        }
-    }
-    
-	 // Method to display the abstract of an article in the WebView, this method has to be called when a new article is selected
-	    public void displayArticleAbstract(Article article) {
-	        String abstractText = article.getAbstractText();
-	        if (abstractText != null && !abstractText.isEmpty()) {
-	            webView.getEngine().loadContent(abstractText, "text/html");
-	        } else {
-	            webView.getEngine().loadContent("<p>No abstract available.</p>", "text/html");
-	        }
-	    }
-	
-    
     // Initialize the controller and fetch articles from the server
     @FXML
     void initialize() {
         newsReaderModel.retrieveData();
         allArticles = newsReaderModel.getArticles();
         System.out.println(allArticles);
-        articlesListView = new ListView<>();
-        articlesListView.setItems(allArticles);
-        articlesListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            setSelectedArticle(newSelection);
+
+        // Assuming you have a valid model and methods for data retrieval
+
+        updateHeadlinesListView("ALL");
+        refreshUserLabel();
+
+        headlinesListView.getSelectionModel().selectFirst();
+
+        // Set the selected article based on the initial selection
+        System.out.println(headlinesListView.getSelectionModel().getSelectedIndex());
+        setSelectedArticle(allArticles.get(headlinesListView.getSelectionModel().getSelectedIndex()));
+
+        // Listen for changes in the selected item
+        headlinesListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+
+            Article newArticle = allArticles.stream()
+                .filter(article -> article.getTitle()
+                    .equals(headlinesListView.getSelectionModel()
+                        .getSelectedItem()))
+                            .findFirst()
+                                .get();
+            setSelectedArticle(newArticle);
+
+
         });
-        updateArticleButtons(); // Edit & Delete only possible if article belongs to logged user
-        getData();
-        updateArticleImage(Article article);
+
+        // Other initialization steps
+        updateArticleButtons();  // Edit & Delete only possible if the article belongs to the logged user
+        //getData();
+        System.out.println(selectedArticle);
+
         // By default, show all categories
-        updateHeadlinesListView("ALL")
-        
+
+
+
         // Label will display the current User's ID
         if (connectionManager != null) {
             String userID = connectionManager.getIdUser();
             NewsforID.setText("News Online for " + userID);
         }
-        
-       
+
+
     }
+
+    private void refreshUserLabel(){
+        if(usr != null){
+            NewsforID.setText("News for " + usr.getLogin());
+        }
+        else{
+            NewsforID.setText("News for Anonymus");
+        }
+    }
+
+
 
     // Set the current user and update the UI accordingly
     public void setUser(User user) {
@@ -119,9 +132,10 @@ public class NewsReaderController {
     // Update the UI when an article is selected
     private void setSelectedArticle(Article article) {
         this.selectedArticle = article;
+        System.out.println("The article is: " + article);
         if (article != null) {
-            articleTitle.setText(article.getTitle());
-            articleAbstract.setText(article.getAbstractText());
+
+            webView.getEngine().loadContent(article.getAbstractText());
             articleImageView.setImage(article.getImageData());
         }
         updateArticleButtons();
@@ -220,7 +234,8 @@ public class NewsReaderController {
     // Update the UI based on the user's login status
     private void updateLoginStatus() {
         boolean isLoggedIn = (usr != null);
-        newArticleButton.setDisable(!isLoggedIn);
+        articleNewButton.setDisable(!isLoggedIn);
+        refreshUserLabel();
         if (selectedArticle != null) {
             updateArticleButtons();
         }
@@ -257,7 +272,7 @@ public class NewsReaderController {
     private void handleLoginButton(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
-            Stage stage = (Stage) LoginButton.getScene().getWindow(); // Get the current stage
+            Stage stage = (Stage) loginButton.getScene().getWindow(); // Get the current stage
             Scene scene = new Scene(loader.load());
 
             stage.setScene(scene);
@@ -287,16 +302,18 @@ public class NewsReaderController {
     private void handleEditArticle(ActionEvent event) {
         try {
             // Assuming you have a method getSelectedArticle() that returns the currently selected article
-            Article selectedArticle = getIDArticle();
+            Article selectedArticle = allArticles.stream()
+                .filter(article -> article.getTitle().equals(headlinesListView.getSelectionModel().getSelectedItem()))
+                .findFirst().get();
             if (selectedArticle == null) {
-            	JOptionPane.showMessageDialog(null, "No article was selected"); // If no article was selected
+                JOptionPane.showMessageDialog(null, "No article was selected"); // If no article was selected
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ArticleEdit.fxml"));
             Stage stage = (Stage) articleEditButton.getScene().getWindow(); // Get the current stage
             Scene scene = new Scene(loader.load());
-            
+
             // Get the controller and pass the article to the ArticleEditController
             ArticleEditController controller = loader.getController();
             controller.setArticle(selectedArticle); // Pass the selected article to the edit controller
@@ -307,15 +324,17 @@ public class NewsReaderController {
             // Handle the exception, maybe show an error message
         }
 
+    }
+
         
-    // Handle the deletion of an article 
+    // Handle the deletion of an article
     @FXML
-    void handleDeleteArticle(ActionEvent event) {
+    public void handleDeleteArticle(ActionEvent event) {
         if (selectedArticle != null) {
             newsReaderModel.deleteArticle(selectedArticle);
-            articlesListView.getItems().remove(selectedArticle);
+            headlinesListView.getItems().remove(selectedArticle);
             // Clear the selection and update the UI
-            articlesListView.getSelectionModel().clearSelection();
+            headlinesListView.getSelectionModel().clearSelection();
             selectedArticle = null;
             updateArticleButtons();
         }
@@ -325,12 +344,13 @@ public class NewsReaderController {
     @FXML
     private void handleExitButton(ActionEvent event) {
         // Get the stage of the current scene
-        Stage stage = (Stage) exit.getScene().getWindow();
+        Stage stage = (Stage) loginButton.getScene().getWindow();
         stage.close();
     }
 
     
-    // If "ReadMoreButton" is clicked, switch to the next Scene 
+    // If "ReadMoreButton" is clicked, switch to the next Scene
+    @FXML
     private void handleReadMore(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ArticleDetails.fxml"));

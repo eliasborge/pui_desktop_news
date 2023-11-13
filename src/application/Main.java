@@ -51,7 +51,7 @@ public class Main extends Application {
 		
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.initStyle(StageStyle.UNDECORATED);
+			//primaryStage.initStyle(StageStyle.UNDECORATED);
 			primaryStage.setScene(scene);
 			/**
 			 * Next tow sentences are used to allow moving window by dragging primary mouse button.
