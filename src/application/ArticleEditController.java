@@ -114,6 +114,11 @@ public class ArticleEditController {
 		
 		return true;
 	}
+
+	@FXML
+	public void showAbstractBody(){
+
+	}
 	
 	/**
 	 * This method is used to set the connection manager which is

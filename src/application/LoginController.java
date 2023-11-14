@@ -69,11 +69,15 @@ public class LoginController {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource(AppScenes.READER.getFxmlFile()));
 					Pane root = loader.load();
 					NewsReaderController controller = loader.getController();
+					controller.setUser(loggedUsr);
 
+
+
+					System.out.println("loginUser" + loggedUsr);
 
 					Scene scene = new Scene(root);
 					stage.setScene(scene);
-					controller.setUser(loggedUsr);
+
 
 				} catch (IOException e) {
 					e.printStackTrace();

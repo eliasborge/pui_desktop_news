@@ -65,6 +65,7 @@ public class NewsReaderController {
 
         updateHeadlinesListView("ALL");
         refreshUserLabel();
+        System.out.println("USER = " + usr);
 
         headlinesListView.getSelectionModel().selectFirst();
 
@@ -235,7 +236,7 @@ public class NewsReaderController {
     private void updateLoginStatus() {
         boolean isLoggedIn = (usr != null);
         articleNewButton.setDisable(!isLoggedIn);
-        refreshUserLabel();
+       // refreshUserLabel();
         if (selectedArticle != null) {
             updateArticleButtons();
         }
