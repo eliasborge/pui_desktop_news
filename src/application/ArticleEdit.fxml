@@ -72,8 +72,6 @@
                 <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#goBack" text="Back" />
                 <Button fx:id="send" mnemonicParsing="false" onAction="#send" text="Send &amp; Back" />
                 <Button fx:id="save" mnemonicParsing="false" onAction="#save" text="Save to File" />
-                <Button fx:id="texthtml" mnemonicParsing="false" onAction="#texthtml" text="Text/HTML" />
-                <Button fx:id="buttonAbstractBody" mnemonicParsing="false" onAction="#showAbstractBody" text="Abstract/Body" />
             </children>
         </HBox>
     </children>

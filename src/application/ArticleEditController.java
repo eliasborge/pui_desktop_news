@@ -11,6 +11,7 @@ import application.news.User;
 import application.utils.JsonArticle;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -173,16 +174,6 @@ public class ArticleEditController {
 		}
 		return result;
 	}
-
-  	/**
-	 * 
-	 * @param usr the usr to set
-	 */
-	void setUsr(User usr) {
-		this.usr = usr;
-		//TODO Update UI and controls 
-		
-	}
   
 	/**
 	 * PRE: User must be set
@@ -231,16 +222,8 @@ public class ArticleEditController {
 			// Handle the exception if there's an issue loading the READER page.
 		}
 	}
-
-	public void showAbstractBody(ActionEvent actionEvent) {
-		//TODO fill this method
-	}
-
 	public void save(ActionEvent actionEvent) {
 		write();
 	}
 
-	public void texthtml(ActionEvent actionEvent) {
-		//TODO change the view from text to HTML
-	}
 }
