@@ -11,6 +11,7 @@ import application.news.User;
 import application.utils.JsonArticle;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -172,16 +173,6 @@ public class ArticleEditController {
 			result = this.editingArticle.getArticleOriginal();
 		}
 		return result;
-	}
-
-  	/**
-	 * 
-	 * @param usr the usr to set
-	 */
-	void setUsr(User usr) {
-		this.usr = usr;
-		//TODO Update UI and controls 
-		
 	}
   
 	/**
