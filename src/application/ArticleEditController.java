@@ -226,16 +226,8 @@ public class ArticleEditController {
 			// Handle the exception if there's an issue loading the READER page.
 		}
 	}
-
-	public void showAbstractBody(ActionEvent actionEvent) {
-		//TODO fill this method
-	}
-
 	public void save(ActionEvent actionEvent) {
 		write();
 	}
 
-	public void texthtml(ActionEvent actionEvent) {
-		//TODO change the view from text to HTML
-	}
 }
