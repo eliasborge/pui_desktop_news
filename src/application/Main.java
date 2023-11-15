@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import application.news.Article;
 import application.news.Categories;
+import application.news.User;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,7 +52,7 @@ public class Main extends Application {
 		
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.initStyle(StageStyle.UNDECORATED);
+			//primaryStage.initStyle(StageStyle.UNDECORATED);
 			primaryStage.setScene(scene);
 			/**
 			 * Next tow sentences are used to allow moving window by dragging primary mouse button.
@@ -99,12 +100,12 @@ public class Main extends Application {
 			Properties prop = buildServerProperties();
 			ConnectionManager connection = new ConnectionManager(prop);
 			//Connecting as public (anonymous) for your group
-			connection.setAnonymousAPIKey(""/*Put your group API Key here*/);
+			connection.setAnonymousAPIKey("ANON03_337"/*Put your group API Key here*/);
 			//Login whitout login form:
-			//	connection.login("Reader2", "reader2"); //User: Reader2 and password "reader2" 
-			//    User user = new User ("Reader2", 
-			//	Integer.parseInt(connection.getIdUser()));
-			//	controller.setUsr(user);
+				connection.login("Reader2", "reader2"); //User: Reader2 and password "reader2"
+			  User user = new User ("Reader2",
+				Integer.parseInt(connection.getIdUser()));
+				controller.setUser(user);
 			controller.setConnectionManager(connection);		
 
 			//end code for main window reader

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package application;
 
 import java.io.FileWriter;
@@ -13,9 +10,7 @@ import application.news.Categories;
 import application.news.User;
 import application.utils.JsonArticle;
 import javafx.beans.property.StringProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -38,7 +33,7 @@ import serverConection.ConnectionManager;
 import serverConection.exceptions.ServerCommunicationError;
 
 /**
- * @author Antonio Carpintero Castilla & Angel Lucas
+ * @author Angel Lucas
  */
 public class ArticleEditController {
 	/**
@@ -179,6 +174,16 @@ public class ArticleEditController {
 		return result;
 	}
 
+  	/**
+	 * 
+	 * @param usr the usr to set
+	 */
+	void setUsr(User usr) {
+		this.usr = usr;
+		//TODO Update UI and controls 
+		
+	}
+  
 	/**
 	 * PRE: User must be set
 	 * 

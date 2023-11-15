@@ -1,0 +1,5 @@
+INDEX VERSION 1.134+/home/paul/Documents/Uni_Masterstudium/TUM/4. Semester - UPM/Programming of UIs/Desktop programming/pui_desktop_news/.metadata/.plugins/org.eclipse.jdt.core
+1865797976.index
+3733943896.index
+1533302516.index
+3939171498.index
