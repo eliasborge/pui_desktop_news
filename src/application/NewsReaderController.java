@@ -54,23 +54,22 @@ public class NewsReaderController {
     private ConnectionManager connectionManager;
 
 
-    // Initialize the controller and fetch articles from the server
-    @FXML
+
     void initialize() {
         newsReaderModel.retrieveData();
         allArticles = newsReaderModel.getArticles();
-        System.out.println(allArticles);
+
 
         // Assuming you have a valid model and methods for data retrieval
 
         updateHeadlinesListView("ALL");
         refreshUserLabel();
-        System.out.println("USER = " + usr);
+
 
         headlinesListView.getSelectionModel().selectFirst();
 
         // Set the selected article based on the initial selection
-        System.out.println(headlinesListView.getSelectionModel().getSelectedIndex());
+
         setSelectedArticle(allArticles.get(headlinesListView.getSelectionModel().getSelectedIndex()));
 
         // Listen for changes in the selected item
@@ -81,7 +80,7 @@ public class NewsReaderController {
                     .equals(headlinesListView.getSelectionModel()
                         .getSelectedItem()))
                             .findFirst()
-                                .get();
+                                .orElse(new Article());
             setSelectedArticle(newArticle);
 
 
@@ -90,17 +89,13 @@ public class NewsReaderController {
         // Other initialization steps
         updateArticleButtons();  // Edit & Delete only possible if the article belongs to the logged user
         //getData();
-        System.out.println(selectedArticle);
+
 
         // By default, show all categories
 
 
 
-        // Label will display the current User's ID
-        if (connectionManager != null) {
-            String userID = connectionManager.getIdUser();
-            NewsforID.setText("News Online for " + userID);
-        }
+        refreshUserLabel();
 
 
     }
@@ -120,7 +115,7 @@ public class NewsReaderController {
     public void setUser(User user) {
         this.usr = user;
         updateLoginStatus();
-        getData();
+
     }
 
     // Fetch data from the model and update the list view for category
@@ -133,7 +128,7 @@ public class NewsReaderController {
     // Update the UI when an article is selected
     private void setSelectedArticle(Article article) {
         this.selectedArticle = article;
-        System.out.println("The article is: " + article);
+
         if (article != null) {
 
             webView.getEngine().loadContent(article.getAbstractText());
@@ -228,7 +223,11 @@ public class NewsReaderController {
 
     // Set the connection manager for the model
     void setConnectionManager(ConnectionManager connection) {
+
+
         newsReaderModel.setConnectionManager(connection);
+        this.connectionManager = connection;
+        initialize();
         getData();
     }
 
@@ -236,7 +235,7 @@ public class NewsReaderController {
     private void updateLoginStatus() {
         boolean isLoggedIn = (usr != null);
         articleNewButton.setDisable(!isLoggedIn);
-       // refreshUserLabel();
+        refreshUserLabel();
         if (selectedArticle != null) {
             updateArticleButtons();
         }
@@ -275,6 +274,10 @@ public class NewsReaderController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
             Stage stage = (Stage) loginButton.getScene().getWindow(); // Get the current stage
             Scene scene = new Scene(loader.load());
+            LoginController controller = loader.getController();
+
+            controller.setConnectionManager(connectionManager);
+
 
             stage.setScene(scene);
         } catch (IOException e) {
@@ -290,6 +293,10 @@ public class NewsReaderController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ArticleEdit.fxml"));
             Stage stage = (Stage) articleNewButton.getScene().getWindow(); // Get the current stage
             Scene scene = new Scene(loader.load());
+            ArticleEditController controller = loader.getController();
+            controller.setConnectionMannager(connectionManager);
+            controller.setUsr(usr);
+            controller.setArticle(null);
 
             stage.setScene(scene);
         } catch (IOException e) {
@@ -318,6 +325,8 @@ public class NewsReaderController {
             // Get the controller and pass the article to the ArticleEditController
             ArticleEditController controller = loader.getController();
             controller.setArticle(selectedArticle); // Pass the selected article to the edit controller
+            controller.setUsr(usr);
+            controller.setConnectionMannager(connectionManager);
 
             stage.setScene(scene);
         } catch (IOException e) {
@@ -333,10 +342,11 @@ public class NewsReaderController {
     public void handleDeleteArticle(ActionEvent event) {
         if (selectedArticle != null) {
             newsReaderModel.deleteArticle(selectedArticle);
-            headlinesListView.getItems().remove(selectedArticle);
+            headlinesListView.getItems().remove(selectedArticle.getTitle());
             // Clear the selection and update the UI
             headlinesListView.getSelectionModel().clearSelection();
             selectedArticle = null;
+            allArticles = newsReaderModel.getArticles();
             updateArticleButtons();
         }
     }
@@ -361,6 +371,9 @@ public class NewsReaderController {
          // Get the controller and pass the article to the ArticleDetailsController
             ArticleDetailsController controller = loader.getController();
             controller.setArticle(selectedArticle);
+            controller.setUsr(usr);
+            controller.setConnectionManager(connectionManager);
+
 
             stage.setScene(scene);
         } catch (IOException e) {
@@ -373,5 +386,9 @@ public class NewsReaderController {
         // The JsonArticle class is assumed to have a method to convert an article to JSON
         // JsonObject jsonArticle = JsonArticle.articleToJson(article);
         // TODO: still todo
+    }
+
+    ConnectionManager getConnectionManager(){
+        return connectionManager;
     }
 }

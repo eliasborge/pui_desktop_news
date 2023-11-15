@@ -141,7 +141,7 @@ public class ConnectionManager {
 				try (InputStream is = connection.getInputStream();
 						JsonReader rdr = Json.createReader(is)) {//try
 					JsonObject jsonObj = rdr.readObject();
-					System.out.println("Leido en login: "+ jsonObj.toString());
+
 
 					idUser = jsonObj.getString("user", "");
 					authType = jsonObj.getString("Authorization", "");
@@ -242,11 +242,11 @@ public class ConnectionManager {
 		if (connection != null) {
 			try (InputStream is = connection.getInputStream(); JsonReader rdr = Json.createReader(is)) {
 				JsonArray arryObj = rdr.readArray();
-				System.out.println("Readed: " + arryObj.size());
+
 
 				for (int i = 0; i < arryObj.size(); i++) {//for
 					JsonObject obj = arryObj.getJsonObject(i);
-					System.out.println("element read ("+i+"): "+obj.toString());	
+
 					Article article;
 					//article = getFullArticle(obj);
 					//Get title, subtitle, category and thumbnail

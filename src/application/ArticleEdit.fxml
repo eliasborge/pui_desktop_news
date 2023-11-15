@@ -2,15 +2,15 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
-<?import javafx.scene.control.MenuItem?>
 
 <AnchorPane prefHeight="410.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ArticleEditController">
     <children>
@@ -48,13 +48,15 @@
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                               <Label text="Category:" />
-                        <ChoiceBox fx:id="categoryField" prefWidth="290.0">
+                        <MenuButton fx:id="categoryField" prefWidth="290.0">
+                            <items>
                             <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="ECONOMY" />
                             <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="INTERNATIONAL" />
                             <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="NATIONAL" />
                             <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="SPORTS" />
                             <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="TECHNOLOGY" />
-                        </ChoiceBox>
+                            </items>
+                        </MenuButton>
 
                      </children>
                      <opaqueInsets>
@@ -77,5 +79,6 @@
                 <Button fx:id="buttonSave" mnemonicParsing="false" onAction="#save" text="Save to File" />
             </children>
         </HBox>
+      <Label layoutY="5.0" onMouseClicked="#onImageClicked" prefHeight="17.0" prefWidth="124.0" text="Click here for image" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />
     </children>
 </AnchorPane>

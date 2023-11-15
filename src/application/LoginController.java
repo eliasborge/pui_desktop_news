@@ -22,12 +22,13 @@ import java.io.IOException;
 
 public class LoginController {
 //TODO Add all attribute and methods as needed 
-	private LoginModel loginModel = new LoginModel();
+	private LoginModel loginModel;
 
 	// DEV_TEAM_03
 	// 123703@3
 	
 	private User loggedUsr = null;
+	private ConnectionManager connection;
 
 	@FXML
 	private Button buttonLogin;
@@ -48,7 +49,8 @@ public class LoginController {
 	}
 
 	public LoginController (){
-	
+
+		this.loginModel = new LoginModel();
 		//Uncomment next sentence to use data from server instead dummy data
 		//loginModel.setDummyData(false);
 	}
@@ -59,8 +61,6 @@ public class LoginController {
 
 
 		if( verifyLogin()){
-
-
 			this.loggedUsr = loginModel.validateUser(username,password);
 			if(this.loggedUsr != null){
 
@@ -70,17 +70,19 @@ public class LoginController {
 					Pane root = loader.load();
 					NewsReaderController controller = loader.getController();
 					controller.setUser(loggedUsr);
+					controller.setConnectionManager(connection);
 
 
 
-					System.out.println("loginUser" + loggedUsr);
+
 
 					Scene scene = new Scene(root);
 					stage.setScene(scene);
 
 
 				} catch (IOException e) {
-					e.printStackTrace();
+					alert.setContentText("Something went wrong, or the username or password is wrong. Try Again");
+					alert.show();
 					// Handle the exception if there's an issue loading the READER page.
 				}
 
@@ -94,6 +96,9 @@ public class LoginController {
 			Stage stage = (Stage) buttonLogin.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(AppScenes.READER.getFxmlFile()));
 			Pane root = loader.load();
+			NewsReaderController controller = loader.getController();
+			controller.setUser(loggedUsr);
+			controller.setConnectionManager(connection);
 
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
@@ -128,6 +133,8 @@ public class LoginController {
 	}
 		
 	void setConnectionManager (ConnectionManager connection) {
+
+		this.connection = connection;
 		this.loginModel.setConnectionManager(connection);
 	}
 }

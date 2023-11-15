@@ -30,7 +30,7 @@
          </children>
       </HBox>
 
-      <Button fx:id="ReadMoreButton" layoutX="639.0" layoutY="561.0" mnemonicParsing="false" onAction="#handleReadMore" prefHeight="37.0" prefWidth="166.0" text="Read More" />
+      <Button fx:id="readMoreButton" layoutX="639.0" layoutY="561.0" mnemonicParsing="false" onAction="#handleReadMore" prefHeight="37.0" prefWidth="166.0" text="Read More" />
                <MenuButton fx:id="categoryMenu" layoutX="8.0" layoutY="530.0" mnemonicParsing="false" prefHeight="30" prefWidth="196.0" text="Categories">
                   <items>
 	                           <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="ALL" />

@@ -57,7 +57,7 @@ public class ArticleEditController {
 	@FXML
 	private TextField subtitleField;
 	@FXML
-	private ChoiceBox<Categories> categoryField;
+	private MenuButton categoryField;
 	@FXML
 	private ImageView imageField;
 	@FXML
@@ -73,18 +73,6 @@ public class ArticleEditController {
 	@FXML
 	private Label userLabel;
 
-	@FXML
-	private void initialize() {
-		titleField.textProperty().bind(editingArticle.titleProperty());
-		subtitleField.textProperty().bind(editingArticle.subtitleProperty());
-		categoryField.setValue(editingArticle.getCategory());
-		articleField.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-			if (newState == Worker.State.SUCCEEDED) {
-				String content = editingArticle.getBodyText();
-				articleField.getEngine().executeScript("document.body.innerHTML = '" + content + "';");
-			}
-		});
-	}
 
 	@FXML
 	void onImageClicked(MouseEvent event) {
@@ -121,7 +109,7 @@ public class ArticleEditController {
 	private void handleCategorySelection(ActionEvent event) {
 		MenuItem source = (MenuItem) event.getSource();
 		String selectedCategory = source.getText();
-		this.categoryField.setValue(Categories.valueOf(selectedCategory));
+		this.categoryField.setText(String.valueOf(selectedCategory));
 	}
 
 	
@@ -146,7 +134,7 @@ public class ArticleEditController {
 		if (usr == null) {
 			return; //Not logged user
 		}
-		this.userLabel.setText("News online for: " +usr.getLogin());
+		//this.userLabel.setText("News online for: " +usr.getLogin());
 	}
 
 	/**
@@ -169,11 +157,28 @@ public class ArticleEditController {
 	 */
 	void setArticle(Article article) {
 		this.editingArticle = (article != null) ? new ArticleEditModel(article) : new ArticleEditModel(usr);
-		this.titleField.setText(article.getTitle());
-		this.subtitleField.setText(article.getSubtitle());
-		this.categoryField.setValue(Categories.valueOf(article.getCategory().toUpperCase()));
-		this.imageField.setImage(article.getImageData());
-		this.articleField.getEngine().loadContent(article.getBodyText());
+		this.titleField.setText(editingArticle.getTitle());
+		this.subtitleField.setText(editingArticle.getSubtitle());
+		this.categoryField.setText((String.valueOf(editingArticle.getCategory()).toUpperCase()));
+		this.imageField.setImage((article == null) ?  new Article().getImageData() : article.getImageData());
+		this.articleField.getEngine().loadContent(editingArticle.getBodyText());
+
+		titleField.textProperty().addListener((observable, oldValue, newValue) -> {
+			editingArticle.titleProperty().setValue(newValue);
+		});
+
+		subtitleField.textProperty().addListener((observable, oldValue, newValue) -> {
+			editingArticle.subtitleProperty().setValue(newValue);
+		});
+
+		articleField.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+			if (newState == Worker.State.SUCCEEDED) {
+				String content = editingArticle.getBodyText();
+				articleField.getEngine().executeScript("document.body.contentEditable = 'true';");
+				articleField.getEngine().executeScript("document.body.innerHTML = '" + content + "';");
+			}
+		});
+
 	}
 	
 	/**
@@ -199,6 +204,9 @@ public class ArticleEditController {
 			Stage stage = (Stage) titleField.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(AppScenes.READER.getFxmlFile()));
 			Pane root = loader.load();
+			NewsReaderController controller = loader.getController();
+			controller.setConnectionManager(connection);
+			controller.setUser(usr);
 
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
@@ -215,18 +223,18 @@ public class ArticleEditController {
 	 * @return true if only if article has been correctly send
 	 */
 	@FXML
-	private boolean send() {
+	private boolean send() throws IOException {
 		String titleText = titleField.getText();
-		Categories category = categoryField.getValue();
+		String category = categoryField.getText().toUpperCase();
 		if (titleText == null || category == null ||
-				titleText.equals("") || category == Categories.ALL) {
+				titleText.equals("") || category.equals("ALL")) {
 			Alert alert = new Alert(AlertType.ERROR, "Imposible send the article!! Title and categoy are mandatory", ButtonType.OK);
 			alert.showAndWait();
 			return false;
 		}
 
 		try {
-			editingArticle.setCategory(categoryField.getValue());
+			editingArticle.setCategory(Categories.valueOf(categoryField.getText()));
 			editingArticle.commit();
 			connection.saveArticle(editingArticle.getArticleOriginal());
 		} catch (ServerCommunicationError e) {
@@ -234,6 +242,7 @@ public class ArticleEditController {
 			alert.showAndWait();
 			return false;
 		}
+		goBack();
 		return true;
 	}
 

@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import serverConection.ConnectionManager;
 
 import java.io.IOException;
 import java.util.WeakHashMap;
@@ -28,6 +29,7 @@ public class ArticleDetailsController {
 		 * Registered user
 		 */
 	    private User usr;
+			private ConnectionManager connection;
 	    
 	    /**
 	     * Article to be shown
@@ -55,22 +57,6 @@ public class ArticleDetailsController {
 
 
 
-			@FXML
-			public void initialize(){
-
-				//TODO MAKE THIS ACTUALLY RENDER AN ARTICLE BY ID
-
-				this.article = new Article();
-				NewsReaderModel model = new NewsReaderModel();
-				model.setDummyData(true);
-				model.retrieveData();
-				ObservableList<Article> articles = model.getArticles();
-				this.article = articles.get(0);
-
-				setArticle(this.article);
-
-
-			}
 
 			public void goBack(){
 				try {
@@ -78,6 +64,8 @@ public class ArticleDetailsController {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource(AppScenes.READER.getFxmlFile()));
 					Pane root = loader.load();
 					NewsReaderController controller = loader.getController();
+					controller.setConnectionManager(connection);
+					controller.setUser(usr);
 
 
 					Scene scene = new Scene(root);
@@ -114,6 +102,9 @@ public class ArticleDetailsController {
 			this.userLabel.setText("News online for: " +usr.getLogin());
 		}
 
+		void setConnectionManager(ConnectionManager connection){
+			this.connection = connection;
+		}
 		/**
 		 * @param article the article to set
 		 */

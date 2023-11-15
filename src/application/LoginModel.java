@@ -54,6 +54,7 @@ class LoginModel {
 	 * @param connection connection to be used in the login process 
 	 */
 	void setConnectionManager(ConnectionManager connection) {
+
 		this.connectionManager = connection;
 		this.setDummyData(false);
 	}
