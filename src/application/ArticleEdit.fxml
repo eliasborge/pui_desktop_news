@@ -73,8 +73,8 @@
         <HBox alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="346.0" prefHeight="50.0" prefWidth="200.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
             <children>
                 <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#goBack" text="Back" />
-                <Button fx:id="send" mnemonicParsing="false" onAction="#send" text="Send &amp; Back" />
-                <Button fx:id="save" mnemonicParsing="false" onAction="#save" text="Save to File" />
+                <Button fx:id="buttonSend" mnemonicParsing="false" onAction="#send" text="Send &amp; Back" />
+                <Button fx:id="buttonSave" mnemonicParsing="false" onAction="#save" text="Save to File" />
             </children>
         </HBox>
     </children>
