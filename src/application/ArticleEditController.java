@@ -37,6 +37,7 @@ import serverConection.exceptions.ServerCommunicationError;
  * @author Angel Lucas
  */
 public class ArticleEditController {
+
 	/**
 	 * Connection used to send article to server after editing process
 	 */
@@ -63,6 +64,10 @@ public class ArticleEditController {
 	private WebView articleField;
 	@FXML
 	private Button buttonBack;
+	@FXML
+	private Button buttonSend;
+	@FXML
+	public Button buttonSave;
 	@FXML
 	private Button buttonAbstractBody;
 	@FXML
@@ -127,7 +132,9 @@ public class ArticleEditController {
 	 */
 	void setConnectionMannager(ConnectionManager connection) {
 		this.connection = connection;
-		//TODO enable send and back button
+		buttonSend.setDisable(false);
+		buttonBack.setDisable(false);
+		buttonSave.setDisable(false);
 	}
 
 	/**
