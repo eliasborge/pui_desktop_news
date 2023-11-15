@@ -112,34 +112,13 @@ public class ArticleEditController {
 	}
 
 
-	
-	/**
-	 * Send and article to server,
-	 * Title and category must be defined and category must be different to ALL
-	 * @return true if only if article has been correctly send
-	 */
 	@FXML
-	private boolean send() {
-		String titleText = titleField.getText();
-		Categories category = categoryField.getValue();
-		if (titleText == null || category == null || 
-				titleText.equals("") || category == Categories.ALL) {
-			Alert alert = new Alert(AlertType.ERROR, "Imposible send the article!! Title and categoy are mandatory", ButtonType.OK);
-			alert.showAndWait();
-			return false;
-		}
-
-		try {
-			editingArticle.setCategory(categoryField.getValue());
-			editingArticle.commit();
-			connection.saveArticle(editingArticle.getArticleOriginal());
-		} catch (ServerCommunicationError e) {
-			Alert alert = new Alert(AlertType.ERROR, "Error sending the article to the server", ButtonType.OK);
-			alert.showAndWait();
-			return false;
-		}
-		return true;
+	private void handleCategorySelection(ActionEvent event) {
+		MenuItem source = (MenuItem) event.getSource();
+		String selectedCategory = source.getText();
+		this.categoryField.setValue(Categories.valueOf(selectedCategory));
 	}
+
 	
 	/**
 	 * This method is used to set the connection manager which is
@@ -222,8 +201,36 @@ public class ArticleEditController {
 			// Handle the exception if there's an issue loading the READER page.
 		}
 	}
+
+	/**
+	 * Send and article to server,
+	 * Title and category must be defined and category must be different to ALL
+	 * @return true if only if article has been correctly send
+	 */
+	@FXML
+	private boolean send() {
+		String titleText = titleField.getText();
+		Categories category = categoryField.getValue();
+		if (titleText == null || category == null ||
+				titleText.equals("") || category == Categories.ALL) {
+			Alert alert = new Alert(AlertType.ERROR, "Imposible send the article!! Title and categoy are mandatory", ButtonType.OK);
+			alert.showAndWait();
+			return false;
+		}
+
+		try {
+			editingArticle.setCategory(categoryField.getValue());
+			editingArticle.commit();
+			connection.saveArticle(editingArticle.getArticleOriginal());
+		} catch (ServerCommunicationError e) {
+			Alert alert = new Alert(AlertType.ERROR, "Error sending the article to the server", ButtonType.OK);
+			alert.showAndWait();
+			return false;
+		}
+		return true;
+	}
+
 	public void save(ActionEvent actionEvent) {
 		write();
 	}
-
 }

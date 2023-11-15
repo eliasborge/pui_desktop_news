@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
+<?import javafx.scene.control.MenuItem?>
 
 <AnchorPane prefHeight="410.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ArticleEditController">
     <children>
@@ -48,9 +49,11 @@
                      <children>
                               <Label text="Category:" />
                         <ChoiceBox fx:id="categoryField" prefWidth="290.0">
-                           <HBox.margin>
-                              <Insets left="20.0" />
-                           </HBox.margin>
+                            <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="ECONOMY" />
+                            <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="INTERNATIONAL" />
+                            <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="NATIONAL" />
+                            <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="SPORTS" />
+                            <MenuItem mnemonicParsing="false" onAction="#handleCategorySelection" text="TECHNOLOGY" />
                         </ChoiceBox>
 
                      </children>
