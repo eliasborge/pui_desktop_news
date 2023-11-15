@@ -120,12 +120,12 @@ public class ArticleEditController {
 	/**
 	 * Send and article to server,
 	 * Title and category must be defined and category must be different to ALL
-	 * @return true if only if article was been correctly send
+	 * @return true if only if article has been correctly send
 	 */
 	@FXML
 	private boolean send() {
-		String titleText = titleField.getText(); // TODO Get article title
-		Categories category = null; //TODO Get article cateory
+		String titleText = titleField.getText();
+		Categories category = categoryField.getValue();
 		if (titleText == null || category == null || 
 				titleText.equals("") || category == Categories.ALL) {
 			Alert alert = new Alert(AlertType.ERROR, "Imposible send the article!! Title and categoy are mandatory", ButtonType.OK);
@@ -187,8 +187,8 @@ public class ArticleEditController {
 	 */
 	void setArticle(Article article) {
 		this.editingArticle = (article != null) ? new ArticleEditModel(article) : new ArticleEditModel(usr);
-		this.titleField.setText("Title: " + article.getTitle());
-		this.subtitleField.setText("Subtitle: " + article.getSubtitle());
+		this.titleField.setText(article.getTitle());
+		this.subtitleField.setText(article.getSubtitle());
 		this.categoryField.setValue(Categories.valueOf(article.getCategory().toUpperCase()));
 		this.imageField.setImage(article.getImageData());
 		this.articleField.getEngine().loadContent(article.getBodyText());
@@ -199,7 +199,6 @@ public class ArticleEditController {
 	 * Article must have a title
 	 */
 	private void write() {
-		//TODO Consolidate all changes	
 		this.editingArticle.commit();
 		//Removes special characters not allowed for filenames
 		String name = this.getArticle().getTitle().replaceAll("\\||/|\\\\|:|\\?","");
@@ -213,12 +212,11 @@ public class ArticleEditController {
 	        }
 	}
 
-	public void goBack(ActionEvent actionEvent) {
+	public void goBack() throws IOException {
 		try {
 			Stage stage = (Stage) titleField.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(AppScenes.READER.getFxmlFile()));
 			Pane root = loader.load();
-			NewsReaderController controller = loader.getController();
 
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
@@ -231,5 +229,13 @@ public class ArticleEditController {
 
 	public void showAbstractBody(ActionEvent actionEvent) {
 		//TODO fill this method
+	}
+
+	public void save(ActionEvent actionEvent) {
+		write();
+	}
+
+	public void texthtml(ActionEvent actionEvent) {
+		//TODO change the view from text to HTML
 	}
 }
